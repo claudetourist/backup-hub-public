@@ -1,0 +1,13 @@
+# npm audit (22 Nov 2026, R0.3; electron bumped in R0.4)
+
+R0.4: electron is now exactly 43.8.12 (it was 43.1.0), which fixes the one advisory against the shipped runtime (see the electron row). The packaged app was rebuilt and launched on it by `npm run bench` (better-sqlite3 loads, the window opens, the database opens). Full `npm audit` is now 34 (3 low, 4 moderate, 24 high, 3 critical): the 35 below minus that one.
+
+`npm audit --omit=dev`: 0 vulnerabilities (the two shipped packages, better-sqlite3 and electron-squirrel-startup, plus zod).
+`npm audit fix` (no --force) changed nothing: everything left needs a major upgrade or a pinned-version decision. Full `npm audit`: 35 (3 low, 4 moderate, 25 high, 3 critical).
+
+| Package (group) | Where it lives | Why it is not fixed |
+|---|---|---|
+| `@electron-forge/*` (cli, core, makers, plugins, templates, shared-types, publisher-base ...) and what they pull in: `@electron/packager`, `@electron/rebuild`, `@electron/node-gyp`, `@electron/universal`, `cacache`, `make-fetch-happen`, `tar` (critical), `tmp`, `extract-zip`, `external-editor`, `@inquirer/*`, `minimatch` | Build tooling only (`npm start`, `npm run package/make`). Not in the packaged app. | The fix is Electron Forge 8 (major). Told not to upgrade Forge major. The advisories are about untrusted archives and temp files on the build machine; Backup Hub only builds its own code. |
+| `vitest` (critical, via `tinypool`), `@vitest/mocker` | Tests only. | Fix is vitest 4 (major). The issues need a hostile test file or a hostile page reaching the vitest server; tests never open network ports to others. |
+| `vite` (high), `esbuild` (moderate) | Dev server and build only. | Fix is Vite 8 (major, and Forge's Vite plugin pins the Vite line). The dev-server issues need a malicious web page open while `npm start` runs; the dev window loads only localhost. |
+| `electron` 43.1.0 (high, FIXED in R0.4 by 43.8.12; kept for the record: "windows opened from a sandboxed top-level document do not inherit its sandbox restrictions") | The one that IS shipped (it is the app's runtime). `--omit=dev` hides it because it is listed under devDependencies. | Pinned exactly in package.json, so `audit fix` leaves it. The fix is electron 43.8.12, same major (no API change expected). Not bumped here (outside this step, it changes the shipped runtime and needs a rebuild of native modules and a run on the real app). Backup Hub's window never opens another window (`setWindowOpenHandler` denies every pop-up, see `src/main/hardening.ts`), which is the path of this advisory. Decision for the owner: bump to 43.8.12 in the next packaging step. Done in R0.4. |

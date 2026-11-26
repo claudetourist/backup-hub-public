@@ -1,0 +1,1394 @@
+/*
+ * The kit (R0.2): sidebar extras, the long table, Drawer, PreviewList, ProgressPanel, Report, StatusPill, KindChip, DeviceDot,
+ * Skeleton, Toast and the four-state pattern. Colours come only from tokens.css, so both themes work; every colour pairing
+ * used here is covered by tokens.test.ts and colorSystem.test.ts.
+ */
+
+/* Sidebar: entries are links now */
+a.rail__item {
+  text-decoration: none;
+}
+
+.rail__item span:not(.rail__badge):not(.sr-only) {
+  min-width: 0;
+}
+
+.rail__menu {
+  margin-top: var(--space-2);
+}
+
+/* Pause everything while it is on: the rail entry that says Resume, and the thin line on top of the page. */
+.rail__item--pause {
+  margin-top: var(--space-2);
+  background: var(--color-warn-tint);
+  color: var(--color-warn-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pause-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-warn-tint);
+  color: var(--color-warn-ink);
+  font-weight: 600;
+}
+
+/* Popup menu (person switcher, menu at the bottom of the sidebar) */
+.popup-menu {
+  position: relative;
+}
+
+.popup-menu__button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 8px var(--space-3);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.popup-menu__button:hover {
+  background: var(--color-ground);
+}
+
+.popup-menu__list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-1);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.popup-menu__list--below {
+  top: calc(100% + 4px);
+}
+
+.popup-menu__list--above {
+  bottom: calc(100% + 4px);
+}
+
+.popup-menu__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 36px;
+  padding: 8px var(--space-2);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-ink);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.popup-menu__item:hover,
+.popup-menu__item:focus-visible {
+  background: var(--color-accent-soft);
+}
+
+.popup-menu__check {
+  display: inline-flex;
+  width: 14px;
+  flex: none;
+  padding-top: 3px;
+  color: var(--color-accent);
+}
+
+.popup-menu__label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.person-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) 0 var(--space-3);
+  margin-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.person-switcher .profile-switcher__title {
+  padding: 0 var(--space-3);
+}
+
+.person-switcher__name {
+  flex: 1 1 auto;
+}
+
+/* Long table: only the rows in view are in the page. Row heights are exact (no collapsed borders), or the scroll maths drifts. */
+.table-scroll--virtual {
+  overflow: auto;
+  border-radius: var(--radius-sm);
+}
+
+.data-table--virtual {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.data-table--virtual:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.data-table--virtual th,
+.data-table--virtual td {
+  box-sizing: border-box;
+  height: var(--row-height, 44px);
+  padding: 0 18px;
+  border-top: 0;
+  border-bottom: 1px solid var(--color-line-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-table--virtual thead th {
+  height: 36px;
+  padding: 0 18px;
+}
+
+.data-table--virtual tbody tr.data-table__pad td {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.data-table tbody tr.is-active > * {
+  background: var(--color-accent-soft);
+}
+
+.data-table--virtual:focus-visible tbody tr.is-active > * {
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+
+/* Status pill: word + icon + colour; "Not connected" is also dashed */
+.status-pill-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 2px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-eyebrow);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.status-pill__detail {
+  font-weight: 500;
+}
+
+.status-pill__age {
+  padding-left: 8px;
+  font-size: var(--text-micro);
+  color: var(--color-muted);
+}
+
+.status-pill--ok {
+  background: var(--status-ok-bg);
+  color: var(--status-ok-ink);
+}
+
+.status-pill--amber {
+  background: var(--status-amber-bg);
+  color: var(--status-amber-ink);
+}
+
+.status-pill--neutral {
+  background: var(--status-neutral-bg);
+  color: var(--status-neutral-ink);
+}
+
+.status-pill--offline {
+  background: var(--status-offline-bg);
+  color: var(--status-offline-ink);
+}
+
+.status-pill--crit {
+  background: var(--status-crit-bg);
+  color: var(--status-crit-ink);
+}
+
+.status-pill--dashed {
+  border-style: dashed;
+  border-color: var(--status-offline);
+}
+
+/* The word is strong text, the icon carries the stronger mark colour, and a thin border in a tint of the mark finishes the pill. */
+.status-pill__word {
+  font-weight: 700;
+}
+
+.status-pill--ok {
+  border-color: color-mix(in srgb, var(--status-ok) 30%, transparent);
+}
+.status-pill--ok svg {
+  color: var(--status-ok);
+}
+.status-pill--amber {
+  border-color: color-mix(in srgb, var(--status-amber) 38%, transparent);
+}
+.status-pill--amber svg {
+  color: var(--status-amber);
+}
+.status-pill--neutral {
+  border-color: color-mix(in srgb, var(--status-neutral) 32%, transparent);
+}
+.status-pill--neutral svg {
+  color: var(--status-neutral);
+}
+.status-pill--offline svg {
+  color: var(--status-offline);
+}
+.status-pill--crit {
+  border-color: color-mix(in srgb, var(--status-crit) 32%, transparent);
+}
+.status-pill--crit svg {
+  color: var(--status-crit);
+}
+.status-pill--dashed {
+  border-color: var(--status-offline);
+}
+
+/* Kind chip: fixed colour + icon + word per kind */
+.kind-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.kind-chip--photos {
+  background: var(--kind-photos-bg);
+  color: var(--kind-photos-ink);
+}
+
+.kind-chip--photos svg {
+  color: var(--kind-photos);
+}
+
+.kind-chip--videos {
+  background: var(--kind-videos-bg);
+  color: var(--kind-videos-ink);
+}
+
+.kind-chip--videos svg {
+  color: var(--kind-videos);
+}
+
+.kind-chip--screenshots {
+  background: var(--kind-screenshots-bg);
+  color: var(--kind-screenshots-ink);
+}
+
+.kind-chip--screenshots svg {
+  color: var(--kind-screenshots);
+}
+
+.kind-chip--whatsapp {
+  background: var(--kind-whatsapp-bg);
+  color: var(--kind-whatsapp-ink);
+}
+
+.kind-chip--whatsapp svg {
+  color: var(--kind-whatsapp);
+}
+
+.kind-chip--recordings {
+  background: var(--kind-recordings-bg);
+  color: var(--kind-recordings-ink);
+}
+
+.kind-chip--recordings svg {
+  color: var(--kind-recordings);
+}
+
+.kind-chip--audio {
+  background: var(--kind-audio-bg);
+  color: var(--kind-audio-ink);
+}
+
+.kind-chip--audio svg {
+  color: var(--kind-audio);
+}
+
+.kind-chip--documents {
+  background: var(--kind-documents-bg);
+  color: var(--kind-documents-ink);
+}
+
+.kind-chip--documents svg {
+  color: var(--kind-documents);
+}
+
+.kind-chip--archives {
+  background: var(--kind-archives-bg);
+  color: var(--kind-archives-ink);
+}
+
+.kind-chip--archives svg {
+  color: var(--kind-archives);
+}
+
+.kind-chip--other {
+  background: var(--kind-other-bg);
+  color: var(--kind-other-ink);
+}
+
+.kind-chip--other svg {
+  color: var(--kind-other);
+}
+
+/* Device dot */
+.device-dot-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.device-dot {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 3px var(--color-line-strong);
+}
+
+/* Skeleton, with what it is doing */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.skeleton__what {
+  margin: 0;
+  color: var(--color-ink-soft);
+  font-weight: 600;
+}
+
+.skeleton__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.skeleton__bar {
+  display: block;
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(90deg, var(--color-line-soft) 25%, var(--color-line) 50%, var(--color-line-soft) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton__bar:nth-child(odd) {
+  width: 92%;
+}
+
+.skeleton__bar:nth-child(even) {
+  width: 68%;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Four states */
+.state-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-left: 4px solid var(--status-crit);
+}
+
+.state-error__text {
+  margin: 0;
+  color: var(--status-crit-ink);
+  font-weight: 600;
+}
+
+.state-loaded {
+  transition: opacity 120ms ease;
+}
+
+.state-loaded.is-dimmed {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Toast */
+.toast-stack {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toast-stack--inline {
+  position: static;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 260px;
+  max-width: 420px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line-strong);
+  border-left-width: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.toast--info {
+  border-left-color: var(--status-info);
+}
+
+.toast--info svg {
+  color: var(--status-info-ink);
+}
+
+.toast--ok {
+  border-left-color: var(--status-ok);
+}
+
+.toast--ok svg {
+  color: var(--status-ok-ink);
+}
+
+.toast--error {
+  border-left-color: var(--status-crit);
+}
+
+.toast--error svg {
+  color: var(--status-crit-ink);
+}
+
+.toast__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.toast__close {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+}
+
+.toast__close:hover {
+  background: var(--color-ground);
+}
+
+/* Drawer (right side: detail, add, edit) */
+.drawer-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(520px, 100vw);
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-line-strong);
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.18);
+  outline: none;
+}
+
+.drawer__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.drawer__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+}
+
+.drawer__close {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-ink-soft);
+  cursor: pointer;
+}
+
+.drawer__close:hover {
+  background: var(--color-ground);
+}
+
+.drawer__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5);
+}
+
+.drawer__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-line);
+}
+
+/* Preview list */
+.preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.preview-list__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.preview-list__count {
+  font-weight: 600;
+}
+
+.preview-list__bulk {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.preview-list__skipped {
+  margin: 0;
+  color: var(--color-ink-soft);
+}
+
+.preview-list__confirm {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preview-list__tick {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+  pointer-events: none;
+}
+
+.preview-list__name {
+  font-family: var(--font-mono);
+  font-size: var(--text-small);
+}
+
+/* Progress panel */
+.progress-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.progress-panel__what {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+}
+
+.progress-panel__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.progress-panel__facts dt {
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.progress-panel__facts dd {
+  margin: 2px 0 0;
+}
+
+.progress-panel__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Report */
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-line);
+  border-left-width: 4px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.report--ok {
+  border-left-color: var(--status-ok);
+}
+
+.report--warn {
+  border-left-color: var(--status-amber);
+}
+
+.report--bad {
+  border-left-color: var(--status-crit);
+}
+
+.report__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.report__headline {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+}
+
+.report__label {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-micro);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.report__block p {
+  margin: 0;
+}
+
+.report__reasons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.report__examples {
+  display: block;
+}
+
+/* Activity is the jobs list as a page */
+.jobs-drawer--page {
+  position: static;
+  width: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.jobs-drawer--page .jobs-drawer__body {
+  overflow: visible;
+}
+
+/* Dev gallery: one theme next to the other */
+.theme-scope {
+  padding: var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-ground);
+  color: var(--color-ink);
+}
+
+.gallery-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--space-4);
+}
+
+.app-frame {
+  display: flex;
+}
+
+.gallery-pair .rail {
+  border: 1px solid var(--color-line);
+  max-width: 260px;
+}
+
+/* ---- Colour pass: categories, accents, gradients. Colours come only from tokens.css (--cat-*, --brand-*, --color-accent). ---- */
+
+/* Page titles: a small eyebrow in the accent colour. */
+.page-header__eyebrow {
+  color: var(--color-accent);
+}
+
+/* The coloured icon chip beside a backup's name (phone, laptop, cloud, drive). */
+.kind-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--chip-bg);
+  color: var(--chip-ink);
+}
+.kind-icon--phone {
+  --chip-bg: var(--cat-phone-bg);
+  --chip-ink: var(--cat-phone-ink);
+}
+.kind-icon--laptop {
+  --chip-bg: var(--cat-laptop-bg);
+  --chip-ink: var(--cat-laptop-ink);
+}
+.kind-icon--onedrive {
+  --chip-bg: var(--cat-onedrive-bg);
+  --chip-ink: var(--cat-onedrive-ink);
+}
+.kind-icon--drive {
+  --chip-bg: var(--cat-drive-bg);
+  --chip-ink: var(--cat-drive-ink);
+}
+
+.backup-name {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.backup-name__text {
+  min-width: 0;
+  padding-top: 5px;
+}
+
+.home-backup__who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.home-backup {
+  grid-template-columns: minmax(150px, 280px) auto minmax(0, 1fr) auto;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.12s ease;
+}
+.home-backup:hover {
+  background: color-mix(in srgb, var(--color-accent) 7%, transparent);
+}
+
+.data-table--hover tbody tr {
+  transition: background-color 0.12s ease;
+}
+.data-table--hover tbody tr:hover {
+  background: color-mix(in srgb, var(--color-accent) 7%, transparent);
+}
+
+/* Sidebar: gradient brand mark, a hue per entry, a coloured pill for the page you are on. */
+.rail__logo-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-to));
+  color: var(--color-on-accent);
+}
+
+.rail__item {
+  --nav-ink: var(--color-accent);
+  transition: background-color 0.12s ease;
+}
+.rail__item svg {
+  color: var(--nav-ink);
+}
+.rail__item:hover {
+  background: color-mix(in srgb, var(--nav-ink) var(--tint-card), transparent);
+}
+.rail__item[aria-current='page'] {
+  background: color-mix(in srgb, var(--nav-ink) var(--tint-strong), var(--color-surface));
+  box-shadow: inset 3px 0 0 var(--nav-ink);
+  color: var(--color-ink);
+}
+.rail__item[href='#/backups'] {
+  --nav-ink: var(--cat-phone-ink);
+}
+.rail__item[href='#/devices'] {
+  --nav-ink: var(--cat-laptop-ink);
+}
+.rail__item[href='#/files'] {
+  --nav-ink: var(--cat-onedrive-ink);
+}
+.rail__item[href='#/free-up-space'] {
+  --nav-ink: var(--cat-drive-ink);
+}
+.rail__item[href='#/activity'] {
+  --nav-ink: var(--cat-person-ink);
+}
+.rail__item[href='#/settings'] {
+  --nav-ink: var(--cat-google-ink);
+}
+
+/* The Working card: tinted, with a gradient progress bar. */
+.working {
+  background: color-mix(in srgb, var(--color-accent) 7%, var(--color-ground));
+  border-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
+}
+.working__spinner {
+  border-color: var(--color-accent);
+  border-right-color: transparent;
+}
+.working .progress {
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--color-line-soft));
+}
+.working .progress__fill {
+  background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+}
+.working--idle {
+  background: var(--color-ground);
+  border-color: var(--color-line);
+}
+
+
+/* ---- Bold pass: tinted cards, solid icon tiles, left bars. Colours come only from tokens.css; tokens.test.ts checks the text on every tint. ---- */
+
+/* A category sets --k (marks, bars, tiles), --k-ink (text) and --k-bg (pale chip). */
+.cat--phone {
+  --k: var(--cat-phone);
+  --k-ink: var(--cat-phone-ink);
+  --k-bg: var(--cat-phone-bg);
+}
+.cat--laptop {
+  --k: var(--cat-laptop);
+  --k-ink: var(--cat-laptop-ink);
+  --k-bg: var(--cat-laptop-bg);
+}
+.cat--onedrive {
+  --k: var(--cat-onedrive);
+  --k-ink: var(--cat-onedrive-ink);
+  --k-bg: var(--cat-onedrive-bg);
+}
+.cat--drive {
+  --k: var(--cat-drive);
+  --k-ink: var(--cat-drive-ink);
+  --k-bg: var(--cat-drive-bg);
+}
+.cat--google {
+  --k: var(--cat-google);
+  --k-ink: var(--cat-google-ink);
+  --k-bg: var(--cat-google-bg);
+}
+.cat--person {
+  --k: var(--cat-person);
+  --k-ink: var(--cat-person-ink);
+  --k-bg: var(--cat-person-bg);
+}
+.cat--brand {
+  --k: var(--color-accent);
+  --k-ink: var(--color-accent);
+  --k-bg: var(--color-accent-soft);
+}
+
+/* The solid icon tile: a category-coloured gradient with the icon in the "on accent" colour. */
+.icon-tile,
+.kind-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--k), color-mix(in srgb, var(--k) 70%, var(--color-ink)));
+  color: var(--color-on-accent);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--k) 30%, transparent);
+}
+.icon-tile--sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+.icon-tile--lg {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+}
+.icon-tile.cat--brand {
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-button-to));
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--brand-from) 30%, transparent);
+}
+.kind-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+}
+.kind-icon--phone {
+  --k: var(--cat-phone);
+}
+.kind-icon--laptop {
+  --k: var(--cat-laptop);
+}
+.kind-icon--onedrive {
+  --k: var(--cat-onedrive);
+}
+.kind-icon--drive {
+  --k: var(--cat-drive);
+}
+
+/* The page behind everything: a faint brand glow at the top. */
+.main {
+  background:
+    radial-gradient(900px 300px at 10% -60px, color-mix(in srgb, var(--brand-from) var(--tint-card), transparent), transparent 75%) no-repeat,
+    radial-gradient(700px 260px at 95% -80px, color-mix(in srgb, var(--brand-to) var(--tint-card), transparent), transparent 75%) no-repeat;
+  background-attachment: local;
+}
+
+/* Page titles: an icon tile, and the eyebrow in the accent colour. */
+.page-header__lead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* Section titles with a tile (Devices). */
+.devices-section__title--tile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+}
+
+/* Panels: a tinted header band in the panel's accent (teal unless it says what it is about), a faint wash below it, and for a kind of panel a top line. */
+.panel {
+  --panel-accent: var(--color-accent);
+  --k: var(--panel-accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel-accent) var(--tint-card), var(--color-surface)), var(--color-surface) 140px);
+  border-color: color-mix(in srgb, var(--panel-accent) 24%, var(--color-line));
+}
+.panel--accent {
+  border-top: 3px solid var(--panel-accent);
+}
+.panel--accent-phone {
+  --panel-accent: var(--cat-phone);
+}
+.panel--accent-laptop {
+  --panel-accent: var(--cat-laptop);
+}
+.panel--accent-onedrive {
+  --panel-accent: var(--cat-onedrive);
+}
+.panel--accent-drive {
+  --panel-accent: var(--cat-drive);
+}
+.panel--accent-google {
+  --panel-accent: var(--cat-google);
+}
+.panel--accent-person {
+  --panel-accent: var(--cat-person);
+}
+.panel > .panel__head {
+  align-items: center;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--panel-accent) var(--tint-wash), var(--color-surface)), color-mix(in srgb, var(--panel-accent) var(--tint-card), var(--color-surface)));
+  border-bottom: 1px solid color-mix(in srgb, var(--panel-accent) 26%, var(--color-line));
+}
+.panel:not(.panel--flush) > .panel__head {
+  margin: calc(-1 * var(--space-5)) -22px var(--space-4);
+  padding: var(--space-3) 22px;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.panel.panel--collapsed:not(.panel--flush) > .panel__head {
+  margin-bottom: calc(-1 * var(--space-5));
+  border-bottom: 0;
+  border-radius: var(--radius-md);
+}
+.panel__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.panel__head .panel__aside,
+.panel__head .panel__summary {
+  color: var(--color-ink-soft);
+}
+
+/* Devices: every card is tinted in its kind colour, with a 4px top band, a tile and a gradient space bar. */
+.device-card[class*='cat--'],
+.home-tile {
+  border-color: color-mix(in srgb, var(--k) 32%, var(--color-line));
+  border-top: 4px solid var(--k);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--k) var(--tint-wash), var(--color-surface)), color-mix(in srgb, var(--k) var(--tint-card), var(--color-surface)) 75%);
+}
+.device-card[class*='cat--'] {
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+.device-card__head {
+  gap: var(--space-3);
+}
+.device-card__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--text-md);
+}
+.device-card .progress,
+.account-row .progress {
+  background: color-mix(in srgb, var(--k) 22%, var(--color-line-soft));
+}
+.device-card .progress {
+  height: 10px;
+  border-radius: var(--radius-xs);
+}
+.device-card .progress--ok .progress__fill,
+.device-card .progress--neutral .progress__fill,
+.account-row .progress--ok .progress__fill,
+.account-row .progress--neutral .progress__fill {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) 55%, var(--color-surface)), var(--k));
+}
+/* Nearly full keeps its own warning colours (orange, then red), never the kind colour. */
+.device-card .progress--amber .progress__fill,
+.account-row .progress--amber .progress__fill {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--status-warn) 60%, var(--color-surface)), var(--status-warn));
+}
+.device-card .progress--crit .progress__fill,
+.account-row .progress--crit .progress__fill {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--status-crit) 60%, var(--color-surface)), var(--status-crit));
+}
+
+/* Google accounts: green cards (Grid view) and rows with a left bar. */
+.account-card .progress {
+  background: color-mix(in srgb, var(--k) 22%, var(--color-line-soft));
+}
+.account-card .progress--ok .progress__fill,
+.account-card .progress--neutral .progress__fill {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) 55%, var(--color-surface)), var(--k));
+}
+.account-card .progress--amber .progress__fill {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--status-warn) 60%, var(--color-surface)), var(--status-warn));
+}
+.account-card .progress--crit .progress__fill {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--status-crit) 60%, var(--color-surface)), var(--status-crit));
+}
+.account-card {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) var(--tint-wash), var(--color-surface)), color-mix(in srgb, var(--k) var(--tint-card), var(--color-surface)) 70%);
+  box-shadow: inset 4px 0 0 var(--k);
+  padding-left: var(--space-4);
+}
+
+/* Google accounts: green rows with a left bar. */
+.account-row {
+  border-bottom: 0;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) var(--tint-wash), var(--color-surface)), color-mix(in srgb, var(--k) var(--tint-card), var(--color-surface)) 70%);
+  box-shadow: inset 4px 0 0 var(--k);
+}
+
+/* Home: the summary tiles are coloured cards with a bigger number. */
+.home-tile {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 240px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+}
+.home-tile__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.home-tile__name {
+  font-size: var(--text-md);
+}
+.home-tile__space {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Your backups (Home) and the Backups table: a left bar in the kind colour on every row. */
+.home-backup {
+  padding-left: var(--space-4);
+  box-shadow: inset 4px 0 0 var(--k);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) var(--tint-card), transparent), transparent 50%);
+}
+.home-backup:hover {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) var(--tint-wash), transparent), color-mix(in srgb, var(--k) var(--tint-card), transparent) 70%);
+}
+.data-table tbody tr[class*='cat--'] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) var(--tint-card), transparent), transparent 45%);
+}
+.data-table tbody tr[class*='cat--'] > :first-child {
+  box-shadow: inset 4px 0 0 var(--k);
+}
+.data-table--hover tbody tr[class*='cat--']:hover {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--k) var(--tint-wash), transparent), color-mix(in srgb, var(--k) var(--tint-card), transparent) 70%);
+}
+
+/* Table header rows (Backups, the file list, Files): a soft brand tint. */
+.data-table thead th {
+  background: color-mix(in srgb, var(--color-accent) var(--tint-wash), var(--color-surface-alt));
+  border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 30%, var(--color-line));
+  color: var(--color-ink-soft);
+}
+
+/* "Needs you": a warning accent on a tinted card, not only a border. */
+.decision {
+  border-color: color-mix(in srgb, var(--status-warn) 34%, var(--color-line-soft));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--status-warn) var(--tint-wash), var(--color-surface)), color-mix(in srgb, var(--status-warn) var(--tint-card), var(--color-surface)) 80%);
+}
+.decision__head svg {
+  color: var(--status-warn-ink);
+}
+.attention-row {
+  --row-accent: var(--status-neutral);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--row-accent) var(--tint-wash), var(--color-surface)), color-mix(in srgb, var(--row-accent) var(--tint-card), var(--color-surface)) 70%);
+}
+.attention-row--crit {
+  --row-accent: var(--status-crit);
+}
+.attention-row--warn {
+  --row-accent: var(--status-warn);
+}
+.attention-row--amber {
+  --row-accent: var(--status-amber);
+}
+.attention-row--info {
+  --row-accent: var(--status-info);
+}
+
+/* "Files to copy": a richer green banner. */
+.phone-preview__headline {
+  border-left-color: var(--status-ok);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--status-ok) var(--tint-strong), var(--color-surface)), color-mix(in srgb, var(--status-ok) var(--tint-card), var(--color-surface)));
+  color: var(--color-ink);
+}
+
+/* Excluded: a clear muted rose, apart from the red "failed" and the green ticks. */
+.pill--excluded {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border: 1px solid color-mix(in srgb, var(--cat-person) 45%, transparent);
+  border-radius: var(--radius-pill);
+  background: var(--cat-person-bg);
+  color: var(--cat-person-ink);
+  font-size: var(--text-eyebrow);
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* Ticked boxes in the brand gradient. An unticked box has a clear outline. */
+.preview-list__tick {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-grid;
+  place-content: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 2px solid var(--color-muted);
+  border-radius: 5px;
+  background: var(--color-surface);
+}
+.preview-list__tick:checked {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-button-to));
+}
+.preview-list__tick:checked::after {
+  content: '';
+  width: 5px;
+  height: 9px;
+  margin-top: -2px;
+  border: solid var(--color-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Activity: a bar in the colour of each job's state. */
+.jobs-drawer__row.jobs-drawer__row--line {
+  --row-tone: var(--status-neutral);
+  box-shadow: inset 4px 0 0 var(--row-tone);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--row-tone) var(--tint-card), transparent), transparent 55%);
+}
+.jobs-drawer__row.jobs-drawer__row--line:hover {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--row-tone) var(--tint-wash), transparent), color-mix(in srgb, var(--row-tone) var(--tint-card), transparent) 70%);
+}
+.jobs-drawer__row.jobs-drawer__row--ok {
+  --row-tone: var(--status-ok);
+}
+.jobs-drawer__row.jobs-drawer__row--warn {
+  --row-tone: var(--status-warn);
+}
+.jobs-drawer__row.jobs-drawer__row--crit {
+  --row-tone: var(--status-crit);
+}
+.jobs-drawer__row.jobs-drawer__row--amber {
+  --row-tone: var(--status-amber);
+}
+.jobs-drawer__row.jobs-drawer__row--info {
+  --row-tone: var(--status-info);
+}
+.jobs-drawer__row.jobs-drawer__row--offline {
+  --row-tone: var(--status-offline);
+}
+
+/* Settings: each group in the left menu has its own hue. */
+.settings-menu__item {
+  --k: var(--cat-phone);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.settings-menu__item::before {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--k);
+}
+.settings-menu__item:nth-child(6n + 2) {
+  --k: var(--cat-drive);
+}
+.settings-menu__item:nth-child(6n + 3) {
+  --k: var(--cat-person);
+}
+.settings-menu__item:nth-child(6n + 4) {
+  --k: var(--cat-onedrive);
+}
+.settings-menu__item:nth-child(6n + 5) {
+  --k: var(--cat-laptop);
+}
+.settings-menu__item:nth-child(6n + 6) {
+  --k: var(--cat-google);
+}
+.settings-menu__item:hover {
+  background: color-mix(in srgb, var(--k) var(--tint-card), var(--color-surface));
+}
+.settings-menu__item[aria-current='page'] {
+  background: color-mix(in srgb, var(--k) var(--tint-strong), var(--color-surface));
+  border-left-color: var(--k);
+  color: var(--color-ink);
+}
+
+/* Sidebar: a faint brand gradient at the top. */
+.rail {
+  background: linear-gradient(165deg, color-mix(in srgb, var(--brand-from) var(--tint-wash), var(--color-surface)) 0, color-mix(in srgb, var(--brand-to) var(--tint-card), var(--color-surface)) 36%, var(--color-surface) 78%);
+}
+
+/* Buttons: primary is the brand gradient (teal into blue); secondary takes a faint tint on hover. */
+.btn--primary {
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-button-to));
+  color: var(--color-on-accent);
+  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.12s ease;
+}
+.btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--color-accent-strong), var(--brand-button-to));
+  box-shadow: 0 3px 12px color-mix(in srgb, var(--brand-button-to) 40%, transparent);
+  transform: translateY(-1px);
+}
+.btn--primary:active:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}
+.btn--secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-accent) var(--tint-wash), var(--color-surface));
+  border-color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn--primary:hover:not(:disabled) {
+    transform: none;
+  }
+}

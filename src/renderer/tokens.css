@@ -1,0 +1,351 @@
+/*
+ * Design tokens (F6). Source of truth for colour, type, spacing and radii.
+ * Values come from design/screens/*.dc.html. Dark values are our own; every text/background
+ * pair is checked at >= 4.5:1 by src/renderer/tokens.test.ts (it parses this file).
+ *
+ * Theme selection: follows the system (prefers-color-scheme) unless <html data-theme="light|dark">
+ * forces one. The dark block is therefore written twice (media query + attribute); keep in sync
+ * (tokens.test.ts fails if they drift). An element with class "theme-scope" and its own data-theme shows that theme next to
+ * the other one (the dev gallery uses it to show both themes at once).
+ */
+:root,
+.theme-scope[data-theme='light'] {
+  color-scheme: light;
+
+  /* Surfaces and lines */
+  --color-ground: #f3f5f2;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f7f9f7;
+  --color-line: #dce3df;
+  --color-line-soft: #e7ece9;
+  --color-line-strong: #c5d0cb;
+
+  /* Text */
+  --color-ink: #16201c;
+  --color-ink-soft: #44524c;
+  --color-muted: #52605a;
+
+  /* Accent */
+  --color-accent: #0b6b5c;
+  --color-accent-strong: #08493f;
+  --color-accent-soft: #e1efea;
+  --color-on-accent: #ffffff;
+  /* Older names, kept as aliases so existing screens keep working. */
+  --color-accent-tint: var(--color-accent-soft);
+  --color-warn-tint: var(--status-warn-bg);
+  --color-warn-ink: var(--status-warn-ink);
+
+  /* Status. no suffix = stripes, dots, bar fills; -ink = text; -bg = pill/tile fill. */
+  --status-ok: #1d7a3e;
+  --status-ok-ink: #1d7a3e;
+  --status-ok-bg: #e2f3e8;
+  --status-warn: #b9500b;
+  --status-warn-ink: #9a4209;
+  --status-warn-bg: #fdeedd;
+  --status-crit: #b42318;
+  --status-crit-ink: #9c1e14;
+  --status-crit-bg: #fde8e6;
+  --status-crit-on: #ffffff;
+  --status-amber: #d27d00;
+  --status-amber-ink: #8a6400;
+  --status-amber-bg: #fbf1d3;
+  --status-info: #2f5fb3;
+  --status-info-ink: #2f5fb3;
+  --status-info-bg: #e6edfa;
+  --status-neutral: #5b6fa8;
+  --status-neutral-ink: #41507f;
+  --status-neutral-bg: #e9edf8;
+
+  /* Offline: a place that is not connected right now (slate, apart from the neutral green-grey). */
+  --status-offline: #7b8794;
+  --status-offline-ink: #4b5563;
+  --status-offline-bg: #eceff3;
+
+  /* Kind families (Search, Jobs, the KindChip): dot = marks, -ink = text, -bg = tinted pill. Chosen so no two read alike under protan or deutan colour blindness (colorSystem.test.ts checks it); each kind also has its own icon and word. */
+  --kind-photos: #be185d;
+  --kind-photos-ink: #be185d;
+  --kind-photos-bg: #f7e3ec;
+  --kind-videos: #4338ca;
+  --kind-videos-ink: #4338ca;
+  --kind-videos-bg: #e8e7f9;
+  --kind-audio: #a16207;
+  --kind-audio-ink: #975c07;
+  --kind-audio-bg: #f4ece1;
+  --kind-documents: #3b82f6;
+  --kind-documents-ink: #2f68c5;
+  --kind-documents-bg: #e7f0fe;
+  --kind-archives: #78350f;
+  --kind-archives-ink: #78350f;
+  --kind-archives-bg: #efe7e2;
+  --kind-google-docs: #c2410c;
+  --kind-google-docs-ink: #9a3412;
+  --kind-google-docs-bg: #ffedd5;
+  --kind-other: #6b7280;
+  --kind-other-ink: #656b78;
+  --kind-other-bg: #edeef0;
+  --kind-screenshots: #0891b2;
+  --kind-screenshots-ink: #06748e;
+  --kind-screenshots-bg: #e1f2f6;
+  --kind-whatsapp: #16a34a;
+  --kind-whatsapp-ink: #117f3a;
+  --kind-whatsapp-bg: #eff9f2;
+  --kind-recordings: #d97706;
+  --kind-recordings-ink: #a55a05;
+  --kind-recordings-bg: #fdfaf5;
+
+  /* Categories (what a backup or panel is about): phone violet, laptop blue, OneDrive/cloud sky, drive amber, Google green, person pink. no suffix = marks, icons, borders (3:1 on the card); -ink = text (4.5:1 on every ground and on its own -bg); -bg = soft tint chip. */
+  --cat-phone: #7c5cff;
+  --cat-phone-ink: #6d51e0;
+  --cat-phone-bg: #efebff;
+  --cat-laptop: #3b82f6;
+  --cat-laptop-ink: #2f68c5;
+  --cat-laptop-bg: #e7f0fe;
+  --cat-onedrive: #0c8fc9;
+  --cat-onedrive-ink: #0a73a2;
+  --cat-onedrive-bg: #e2f4fc;
+  --cat-drive: #bd7a08;
+  --cat-drive-ink: #996307;
+  --cat-drive-bg: #fef3e2;
+  --cat-google: #1b9d4b;
+  --cat-google-ink: #157c3b;
+  --cat-google-bg: #e4f8ec;
+  --cat-person: #e74796;
+  --cat-person-ink: #b83877;
+  --cat-person-bg: #fde9f3;
+
+  /* Brand gradient ends (logo, progress) */
+  --brand-from: var(--color-accent);
+  --brand-to: var(--cat-phone);
+  /* Primary buttons: teal into blue (white text stays 4.5:1 on both ends). */
+  --brand-button-to: #2a63c2;
+
+  /* Tints: how much of a colour is mixed into a surface (card, wash and strong). Text on every tint is checked by tokens.test.ts. */
+  --tint-card: 8%;
+  --tint-wash: 12%;
+  --tint-strong: 17%;
+
+  /* Type */
+  --font-body: 'Instrument Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-heading: 'Bricolage Grotesque', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+  --text-micro: 11px;
+  --text-eyebrow: 12px;
+  --text-small: 13px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 17px;
+  --text-xl: 18px;
+  --text-2xl: 22px;
+  --text-title: 30px;
+  --text-display: 34px;
+  --text-stat: 40px;
+
+  /* Space (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Shape */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+  --control-height: 40px;
+
+  /* Layout */
+  --rail-min: 200px;
+  --rail-max: 232px;
+  --focus-ring: 2px solid var(--color-accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --color-ground: #0f1512;
+    --color-surface: #17201c;
+    --color-surface-alt: #1b2621;
+    --color-line: #2b3832;
+    --color-line-soft: #222d28;
+    --color-line-strong: #3d4d45;
+    --color-ink: #e8efeb;
+    --color-ink-soft: #b9c6c0;
+    --color-muted: #a6b5ae;
+    --color-accent: #4fc4aa;
+    --color-accent-strong: #8fdfcd;
+    --color-accent-soft: #163029;
+    --color-on-accent: #04201a;
+    --status-ok: #3fb868;
+    --status-ok-ink: #6fd08f;
+    --status-ok-bg: #14301e;
+    --status-warn: #e27a33;
+    --status-warn-ink: #f2a468;
+    --status-warn-bg: #3a2312;
+    --status-crit: #f0584b;
+    --status-crit-ink: #ff938a;
+    --status-crit-bg: #3c1816;
+    --status-crit-on: #1f0705;
+    --status-amber: #d4a017;
+    --status-amber-ink: #e8c14f;
+    --status-amber-bg: #33290c;
+    --status-info: #6c9bea;
+    --status-info-ink: #a3c1f6;
+    --status-info-bg: #172742;
+    --status-neutral: #8c9fd4;
+    --status-neutral-ink: #b6c4ee;
+    --status-neutral-bg: #232b46;
+
+    --status-offline: #8b97a3;
+    --status-offline-ink: #c0c9d2;
+    --status-offline-bg: #29313a;
+    --kind-photos: #fb7185;
+    --kind-photos-ink: #fb7487;
+    --kind-photos-bg: #453031;
+    --kind-videos: #8b5cf6;
+    --kind-videos-ink: #a783f8;
+    --kind-videos-bg: #2e2c48;
+    --kind-audio: #a3e635;
+    --kind-audio-ink: #a3e635;
+    --kind-audio-bg: #334821;
+    --kind-documents: #60a5fa;
+    --kind-documents-ink: #63a7fa;
+    --kind-documents-bg: #263b48;
+    --kind-archives: #ca8a04;
+    --kind-archives-ink: #cf961d;
+    --kind-archives-bg: #3b3517;
+    --kind-google-docs: #fb923c;
+    --kind-google-docs-ink: #fdba74;
+    --kind-google-docs-bg: #3a1e0c;
+    --kind-other: #94a3b8;
+    --kind-other-ink: #96a5b9;
+    --kind-other-bg: #303a3b;
+    --kind-screenshots: #67e8f9;
+    --kind-screenshots-ink: #67e8f9;
+    --kind-screenshots-bg: #274848;
+    --kind-whatsapp: #86efac;
+    --kind-whatsapp-ink: #86efac;
+    --kind-whatsapp-bg: #2d4939;
+    --kind-recordings: #ef4444;
+    --kind-recordings-ink: #f36d6d;
+    --kind-recordings-bg: #422724;
+    --cat-phone: #a18bff;
+    --cat-phone-ink: #a18bff;
+    --cat-phone-bg: #2d3140;
+    --cat-laptop: #60a5fa;
+    --cat-laptop-ink: #60a5fa;
+    --cat-laptop-bg: #233540;
+    --cat-onedrive: #38bdf8;
+    --cat-onedrive-ink: #38bdf8;
+    --cat-onedrive-bg: #1c393f;
+    --cat-drive: #fbbf24;
+    --cat-drive-ink: #fbbf24;
+    --cat-drive-bg: #3b391d;
+    --cat-google: #4ade80;
+    --cat-google-ink: #4ade80;
+    --cat-google-bg: #1f3e2c;
+    --cat-person: #f472b6;
+    --cat-person-ink: #f472b6;
+    --cat-person-bg: #3a2d35;
+    --brand-button-to: #5aa2f0;
+    --tint-card: 14%;
+    --tint-wash: 20%;
+    --tint-strong: 26%;
+  }
+}
+
+:root[data-theme='dark'],
+.theme-scope[data-theme='dark'] {
+  color-scheme: dark;
+  --color-ground: #0f1512;
+  --color-surface: #17201c;
+  --color-surface-alt: #1b2621;
+  --color-line: #2b3832;
+  --color-line-soft: #222d28;
+  --color-line-strong: #3d4d45;
+  --color-ink: #e8efeb;
+  --color-ink-soft: #b9c6c0;
+  --color-muted: #a6b5ae;
+  --color-accent: #4fc4aa;
+  --color-accent-strong: #8fdfcd;
+  --color-accent-soft: #163029;
+  --color-on-accent: #04201a;
+  --status-ok: #3fb868;
+  --status-ok-ink: #6fd08f;
+  --status-ok-bg: #14301e;
+  --status-warn: #e27a33;
+  --status-warn-ink: #f2a468;
+  --status-warn-bg: #3a2312;
+  --status-crit: #f0584b;
+  --status-crit-ink: #ff938a;
+  --status-crit-bg: #3c1816;
+  --status-crit-on: #1f0705;
+  --status-amber: #d4a017;
+  --status-amber-ink: #e8c14f;
+  --status-amber-bg: #33290c;
+  --status-info: #6c9bea;
+  --status-info-ink: #a3c1f6;
+  --status-info-bg: #172742;
+  --status-neutral: #8c9fd4;
+  --status-neutral-ink: #b6c4ee;
+  --status-neutral-bg: #232b46;
+  --status-offline: #8b97a3;
+  --status-offline-ink: #c0c9d2;
+  --status-offline-bg: #29313a;
+  --kind-photos: #fb7185;
+  --kind-photos-ink: #fb7487;
+  --kind-photos-bg: #453031;
+  --kind-videos: #8b5cf6;
+  --kind-videos-ink: #a783f8;
+  --kind-videos-bg: #2e2c48;
+  --kind-audio: #a3e635;
+  --kind-audio-ink: #a3e635;
+  --kind-audio-bg: #334821;
+  --kind-documents: #60a5fa;
+  --kind-documents-ink: #63a7fa;
+  --kind-documents-bg: #263b48;
+  --kind-archives: #ca8a04;
+  --kind-archives-ink: #cf961d;
+  --kind-archives-bg: #3b3517;
+  --kind-google-docs: #fb923c;
+  --kind-google-docs-ink: #fdba74;
+  --kind-google-docs-bg: #3a1e0c;
+  --kind-other: #94a3b8;
+  --kind-other-ink: #96a5b9;
+  --kind-other-bg: #303a3b;
+  --kind-screenshots: #67e8f9;
+  --kind-screenshots-ink: #67e8f9;
+  --kind-screenshots-bg: #274848;
+  --kind-whatsapp: #86efac;
+  --kind-whatsapp-ink: #86efac;
+  --kind-whatsapp-bg: #2d4939;
+  --kind-recordings: #ef4444;
+  --kind-recordings-ink: #f36d6d;
+  --kind-recordings-bg: #422724;
+  --cat-phone: #a18bff;
+  --cat-phone-ink: #a18bff;
+  --cat-phone-bg: #2d3140;
+  --cat-laptop: #60a5fa;
+  --cat-laptop-ink: #60a5fa;
+  --cat-laptop-bg: #233540;
+  --cat-onedrive: #38bdf8;
+  --cat-onedrive-ink: #38bdf8;
+  --cat-onedrive-bg: #1c393f;
+  --cat-drive: #fbbf24;
+  --cat-drive-ink: #fbbf24;
+  --cat-drive-bg: #3b391d;
+  --cat-google: #4ade80;
+  --cat-google-ink: #4ade80;
+  --cat-google-bg: #1f3e2c;
+  --cat-person: #f472b6;
+  --cat-person-ink: #f472b6;
+  --cat-person-bg: #3a2d35;
+  --brand-button-to: #5aa2f0;
+  --tint-card: 14%;
+  --tint-wash: 20%;
+  --tint-strong: 26%;
+}

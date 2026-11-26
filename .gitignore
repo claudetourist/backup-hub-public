@@ -1,0 +1,29 @@
+# Dependencies and build output
+node_modules/
+out/
+.vite/
+dist/
+*.tsbuildinfo
+coverage/
+
+# Local runtime data: the app keeps data and logs below %APPDATA%\Backup Hub (outside this repo).
+# These guard against accidents.
+data/
+logs/
+userdata/
+*.log
+*.db
+*.db-wal
+*.db-shm
+
+.env
+.env.*
+.DS_Store
+.claude/scheduled_tasks.lock
+
+# Personal status docs and snapshots of the author's plan: never published
+docs/plan-snapshot/
+docs/screens/
+
+# Dev runs keep their data here (BACKUPHUB_DATA_DIR)
+.devdata/
